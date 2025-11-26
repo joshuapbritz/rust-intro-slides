@@ -310,3 +310,83 @@ println!("Data fetched for user: {}", result.name);
 This is exactly what Cloudflare had done when we had the outage the other day. They had unwrapped an error which cause the entire program to crash. Rust does not recommend using `unwrap` in production code so be careful if you are using it. Prefer using something like `unwrap_or` to provide default values.
 
 [Read Cloudflare's article here](https://blog.cloudflare.com/18-november-2025-outage/#memory-preallocation)
+
+---
+
+# Ownership model
+
+Rust has another very unique feature that makes it a lot safer to user than many other system level lanaguages. That is the ownership model. At a very high level, this means that each variable we define owns its value. Rust doesn't have a garbage collector like Java or C# but you also don't have to manually manage your memory like C or C++. This gives us the best of both worlds.
+
+```rust
+fn main() {
+    let name = String::from("John Doe");
+    println!("Name is {}", name); // This works
+}
+```
+
+How Rust manages memory is that is keeps a value alive until it goes out of scope. For example:
+
+```rust
+fn main() {
+    let name = String::from("John Doe");
+    let my_name = name;
+    
+    // This now throws an error because the variable `name` no longer has ownership of its value.
+    println!("Name is {}", name); 
+}
+```
+
+---
+
+## (cont.) Ownership model
+
+The advantage here is that we don't need to remember to cleanup memory like in C but we don't have the inefficiency of a garbage collector like in Java. The downside is that you have to be mindful of this ownership model when writing code. 
+
+Now, you might have picked up a concern here. What happens if you need to use a value but you don't want the original owner to lose ownership? Rust further works with the ownership model using a concept called borrowing. Borrowing is basically telling Rust that you are going to use a value, but it still belongs to the original variable it was assigned to. In this case, the variable is only discarded when the original variable goes out of scope. Borrowing is done using the `&` syntax.
+
+```rust
+fn main() {
+    let name = String::from("John Doe");
+    let my_name = &name;
+    
+    // No error now
+    println!("My name is {}", my_name); 
+    println!("Name is {}", name); 
+}
+```
+
+There are some more examples on the next slide.
+
+---
+
+## (cont.) Ownership model
+
+
+```rust
+fn transform_name(name: String) -> String {
+    format!("Foo {}", name)
+}
+
+fn main() {
+    let name = String::from("John Doe");
+    let my_name = transform_name(name);
+    
+    println!("My name is {}", my_name); // No error here
+    println!("Name is {}", name); // This line gives an error because we gave ownership to the transform_name function
+}
+```
+
+
+```rust
+fn transform_name(name: &str) -> String {
+    format!("Foo {}", name)
+}
+
+fn main() {
+    let name = String::from("John Doe");
+    let my_name = transform_name(&name);
+    
+    println!("My name is {}", my_name); // No error here
+    println!("Name is {}", name); // Also no error here
+}
+```
