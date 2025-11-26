@@ -390,3 +390,10 @@ fn main() {
     println!("Name is {}", name); // Also no error here
 }
 ```
+
+---
+
+# Learning resources
+
+- [The Rust Handbook](https://doc.rust-lang.org/stable/book/title-page.html)
+- [Rustlings](https://rustlings.rust-lang.org/)
