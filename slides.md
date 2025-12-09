@@ -397,3 +397,6 @@ fn main() {
 
 - [The Rust Handbook](https://doc.rust-lang.org/stable/book/title-page.html)
 - [Rustlings](https://rustlings.rust-lang.org/)
+- [Idiomatic Rust](https://corrode.dev/blog/idiomatic-rust-resources/)
+- [Rust 101](https://teach-rs.trifectatech.org/)
+- [Rust Resources](https://github.com/mre/idiomatic-rust)
